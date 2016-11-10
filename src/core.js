@@ -2980,6 +2980,8 @@ Strophe.Connection.prototype = {
                     this.send($iq({type: "set", id: "_session_auth_2"})
                                   .c('session', {xmlns: Strophe.NS.SESSION})
                                   .tree());
+                    this._addSysTimedHandler(2000,this._final_auth_monitor.bin
+(this));
                 } else {
                     this.authenticated = true;
                     this._changeConnectStatus(Strophe.Status.CONNECTED, null);
@@ -2990,6 +2992,19 @@ Strophe.Connection.prototype = {
             this._changeConnectStatus(Strophe.Status.AUTHFAIL, null);
             return false;
         }
+    },
+
+    _final_auth_monitor: function ()
+    {
+        if (this.authenticated) {
+                Strophe.debug("All is good we authenticated");
+                return false;
+        } else {
+                Strophe.debug("Looks like me need to force a poll");
+                this._proto._conn._data.push(null);
+                return true;
+        }
+
     },
 
     /** PrivateFunction: _sasl_session_cb
