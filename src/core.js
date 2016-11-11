@@ -2980,8 +2980,7 @@ Strophe.Connection.prototype = {
                     this.send($iq({type: "set", id: "_session_auth_2"})
                                   .c('session', {xmlns: Strophe.NS.SESSION})
                                   .tree());
-                    this._addSysTimedHandler(2000,this._final_auth_monitor.bin
-(this));
+                    this._addSysTimedHandler(2000, this._final_auth_monitor.bind(this));
                 } else {
                     this.authenticated = true;
                     this._changeConnectStatus(Strophe.Status.CONNECTED, null);
